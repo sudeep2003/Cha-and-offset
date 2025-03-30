@@ -41,46 +41,72 @@ def extract_value(feature_value):
 
 
 def add_header_info(canvas, doc, report_info):
-    """ Adds the header with Point Report title and additional info in a four-column layout. """
+    """ Adds the header with Point Report title and additional info in a five-column layout. """
     canvas.saveState()
 
     # Page width for landscape A4
     page_width = landscape(A4)[0]
 
-    # Title - Top left
-    canvas.setFont("Helvetica-Bold", 16)
-    canvas.drawString(40, 550, "Point Report")
+    # First column - Company name and title
+    # Company Name
+    canvas.setFont("Helvetica-Bold", 18)
+    canvas.drawString(40, 560, "Navvis Geomatics")
 
-    # Calculate column positions (divide usable width into 4 equal columns)
+    # Title
+    canvas.setFont("Helvetica-Bold", 22)
+    canvas.drawString(40, 530, "Point Report")
+
+    # Calculate column positions (divide usable width into 5 equal columns)
     left_margin = 40
-    col_width = (page_width - (left_margin * 2)) / 4
+    col_width = (page_width - (left_margin * 2)) / 5
 
+    # Define columns
     col1 = left_margin
     col2 = left_margin + col_width
     col3 = left_margin + (col_width * 2)
     col4 = left_margin + (col_width * 3)
+    col5 = left_margin + (col_width * 4)
 
     # Set font for all info text
     canvas.setFont("Helvetica", 10)
 
-    # First column
-    y_pos = 530
-    canvas.drawString(col1, y_pos, f"Project: {report_info.get('Project', '')}")
-    canvas.drawString(col1, y_pos - 15, f"Spread: {report_info.get('Spread', '')}")
-    canvas.drawString(col1, y_pos - 30, f"File: {report_info.get('File', '')}")
+    # Row position
+    y_pos = 490
 
-    # Second column
-    canvas.drawString(col2, y_pos, f"Base Point: {report_info.get('Base Point', '')}")
-    canvas.drawString(col2, y_pos - 15, f"Point Number: ")
+    # Second column - Project info
+    # canvas.drawString(col2, y_pos + 15, "Project Information")
+    # canvas.setFont("Helvetica", 10)
+    canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col2, y_pos, f"Project: {report_info.get('Project', '')}")
+    canvas.drawString(col2, y_pos - 15, f"Spread: {report_info.get('Spread', '')}")
+    canvas.drawString(col2, y_pos - 30, f"File: {report_info.get('File', '')}")
 
-    # Third column
-    canvas.drawString(col3, y_pos, f"Control check: ")
-    canvas.drawString(col3, y_pos - 15, f"Point Number: 5960890")
+    # Third column - Base point info
+    # canvas.drawString(col3, y_pos + 15, "Base Point Information")
+    # canvas.setFont("Helvetica", 10)
+    canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col3, y_pos, f"Base Point: {report_info.get('Base Point', '')}")
+    canvas.drawString(col3, y_pos - 15, f"Point Number:")
 
-    # Fourth column
-    canvas.drawString(col4, y_pos, f"{report_info.get('Point Number', '214 codes')}")
-    canvas.drawString(col4, y_pos - 15, f"{report_info.get('Control check', '0 Not entered')}")
-    canvas.drawString(col4, y_pos - 30, f"Score: {report_info.get('Score', '100.00%')}")
+    # Fourth column - Control check
+    # canvas.drawString(col4, y_pos + 15, "Control Check")
+    # canvas.setFont("Helvetica", 10)
+    canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col4, y_pos, f"Control check:")
+    canvas.drawString(col4, y_pos - 15, f"Point Number: 5960890")
+
+    # Fifth column - Additional info
+    # canvas.drawString(col5, y_pos + 15, "Code Information")
+    # canvas.setFont("Helvetica", 10)
+    canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col5, y_pos, f"{report_info.get('Point Number', '214 codes')}")
+    canvas.drawString(col5, y_pos - 15, f"{report_info.get('Control check', '0 Not entered')}")
+    canvas.drawString(col5, y_pos - 30, f"Score: {report_info.get('Score', '100.00%')}")
+
+    # Add a line below the header
+    canvas.setStrokeColor(colors.HexColor("#003366"))
+    canvas.setLineWidth(2)
+    canvas.line(40, y_pos - 45, page_width - 40, y_pos - 45)
 
     canvas.restoreState()
 
