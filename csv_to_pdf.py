@@ -64,13 +64,16 @@ class MyCanvas(canvas.Canvas):
         page = self._pageNumber
         self.saveState()
 
+        # Header height calculation
+        header_height = 140  # Increased for more space
+
         # Background for header
         self.setFillColor(colors.HexColor("#f9f9f9"))
-        self.rect(20, self.height - 120, self.width - 40, 80, fill=1, stroke=0)
+        self.rect(20, self.height - header_height, self.width - 40, 90, fill=1, stroke=0)
 
         # Decorative element
         self.setFillColor(colors.HexColor("#003366"))
-        self.rect(20, self.height - 120, 10, 80, fill=1, stroke=0)
+        self.rect(20, self.height - header_height, 10, 90, fill=1, stroke=0)
 
         # Company Name
         self.setFillColor(colors.HexColor("#003366"))
@@ -216,13 +219,16 @@ def csv_to_pdf(csv_file, chainages, output_folder=None, report_info=None):
     df = df[["Point", "Northing", "Easting", "Elevation", "Description", "Chainage", "Offset", "FeatureName"]]
     df.fillna("N/A", inplace=True)
 
+    # Increased top margin to prevent header overlay
+    top_margin = 150  # Increased from 120
+
     # Set up the document
     doc = SimpleDocTemplate(
         output_pdf,
         pagesize=landscape(A4),
         leftMargin=40,
         rightMargin=40,
-        topMargin=120,  # Make room for header
+        topMargin=top_margin,  # Increased to make more room for header
         bottomMargin=40
     )
 
@@ -262,25 +268,26 @@ def csv_to_pdf(csv_file, chainages, output_folder=None, report_info=None):
 
     # Apply all styles to table
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#003366")),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 10),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('TOPPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 8),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
-        ('BOTTOMPADDING', (0, 1), (-1, -1), 5),
-        ('TOPPADDING', (0, 1), (-1, -1), 5),
-        ('WORDWRAP', (4, 1), (7, -1)),
-    ] + num_align + desc_align + text_align + row_colors))
+                                  ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#003366")),
+                                  ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                                  ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+                                  ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                  ('FONTSIZE', (0, 0), (-1, 0), 10),
+                                  ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                  ('TOPPADDING', (0, 0), (-1, 0), 12),
+                                  ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                                  ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                                  ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                                  ('LEFTPADDING', (0, 0), (-1, -1), 8),
+                                  ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+                                  ('BOTTOMPADDING', (0, 1), (-1, -1), 5),
+                                  ('TOPPADDING', (0, 1), (-1, -1), 5),
+                                  ('WORDWRAP', (4, 1), (7, -1)),
+                              ] + num_align + desc_align + text_align + row_colors))
 
-    # Add elements to document
+    # Add elements to document with a spacer at the top for extra buffer
     elements = []
+    elements.append(Spacer(1, 10))  # Add a small spacer for extra buffer
     elements.append(table)
 
     # Build the document with our custom canvas
