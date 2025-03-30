@@ -74,31 +74,31 @@ def add_header_info(canvas, doc, report_info):
     y_pos = 490
 
     # Second column - Project info
-    # canvas.drawString(col2, y_pos + 15, "Project Information")
-    # canvas.setFont("Helvetica", 10)
     canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col2, y_pos + 15, "Project Information")
+    canvas.setFont("Helvetica", 10)
     canvas.drawString(col2, y_pos, f"Project: {report_info.get('Project', '')}")
     canvas.drawString(col2, y_pos - 15, f"Spread: {report_info.get('Spread', '')}")
     canvas.drawString(col2, y_pos - 30, f"File: {report_info.get('File', '')}")
 
     # Third column - Base point info
-    # canvas.drawString(col3, y_pos + 15, "Base Point Information")
-    # canvas.setFont("Helvetica", 10)
     canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col3, y_pos + 15, "Base Point Information")
+    canvas.setFont("Helvetica", 10)
     canvas.drawString(col3, y_pos, f"Base Point: {report_info.get('Base Point', '')}")
     canvas.drawString(col3, y_pos - 15, f"Point Number:")
 
     # Fourth column - Control check
-    # canvas.drawString(col4, y_pos + 15, "Control Check")
-    # canvas.setFont("Helvetica", 10)
     canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col4, y_pos + 15, "Control Check")
+    canvas.setFont("Helvetica", 10)
     canvas.drawString(col4, y_pos, f"Control check:")
     canvas.drawString(col4, y_pos - 15, f"Point Number: 5960890")
 
     # Fifth column - Additional info
-    # canvas.drawString(col5, y_pos + 15, "Code Information")
-    # canvas.setFont("Helvetica", 10)
     canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawString(col5, y_pos + 15, "Code Information")
+    canvas.setFont("Helvetica", 10)
     canvas.drawString(col5, y_pos, f"{report_info.get('Point Number', '214 codes')}")
     canvas.drawString(col5, y_pos - 15, f"{report_info.get('Control check', '0 Not entered')}")
     canvas.drawString(col5, y_pos - 30, f"Score: {report_info.get('Score', '100.00%')}")
@@ -188,11 +188,12 @@ def csv_to_pdf(csv_file, chainages, output_folder=None, report_info=None):
                             bottomMargin=40)
 
     elements = []
-    # Remove the title from elements as we'll add it directly to the canvas
     elements.append(Spacer(1, 12))
 
     col_widths = [1.0 * inch, 1.0 * inch, 1.0 * inch, 1.0 * inch, 1.0 * inch, 1.0 * inch, 1.2 * inch, 4.0 * inch]
-    table = Table(data, colWidths=col_widths)
+
+    # Create table with repeating headers
+    table = Table(data, colWidths=col_widths, repeatRows=1)
 
     num_align = [('ALIGN', (i, 1), (i, -1), 'RIGHT') for i in [0, 1, 2, 3, 5, 6]]
     desc_align = [('ALIGN', (4, 1), (4, -1), 'LEFT')]
